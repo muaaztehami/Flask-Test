@@ -16,45 +16,44 @@ def process():
     return 'celery worked'
 
 @celery.task(name='apis.check_employees')
-def check_employees():
-    emplys = EmployeeModel.objects.all()
-    not_working = ''
-    for e in emplys:
-        if e['project_id'] == None:
-            not_working +=e['emply_name']
-    return not_working
+def check_employees(task_id=None):
+    not_working = EmployeeModel.objects(projects_id=None).all()
+    employee_names = ''
+    for e in not_working:
+        employee_names +=e['employee_name']
+    return employee_names
 #check_employees.delay()
 
 @jwt_required()
-@appInstance.route('/add_employee/<proj_name>/<emply_name>', methods=['PUT'])
-def add_employee_to_project(proj_name, emply_name):
-    the_project = ProjectModel.objects(proj_name=proj_name).first()
-    emply_obj = EmployeeModel.objects(emply_name=emply_name).first()
-    emply_obj.update(project_id=the_project['id'])
-    return make_response({"employees":emply_obj}, 201)
+@appInstance.route('/add_employee/<project_name>/<employee_name>', methods=['PUT'])
+def add_employee_to_project(project_name, employee_name):
+    the_project = ProjectModel.objects(project_name=project_name).first()
+    employee_obj = EmployeeModel.objects(employee_name=employee_name).first()
+    employee_obj.update(projects_id=the_project['id'])
+    return make_response({"employees":employee_obj}, 201)
     
 @jwt_required()
-@appInstance.route('/remove_employee/<proj_name>/<emply_name>', methods=['PUT'])
-def remove_employee_to_project(proj_name, emply_name):
-    the_project = ProjectModel.objects(proj_name=proj_name).first()
-    emply_obj = EmployeeModel.objects(emply_name=emply_name).first()
-    emply_obj.update(project_id=None)
-    return make_response({"employees":emply_obj}, 201)
+@appInstance.route('/remove_employee/<project_name>/<employee_name>', methods=['PUT'])
+def remove_employee_to_project(project_name, employee_name):
+    the_project = ProjectModel.objects(project_name=project_name).first()
+    employee_obj = EmployeeModel.objects(employee_name=employee_name).first()
+    employee_obj.update(projects_id=None)
+    return make_response({"employees":employee_obj}, 201)
 
 
 ##################################
 @jwt_required()
-@appInstance.route('/add_project/<clnt_name>/<proj_name>', methods=['PUT'])
-def add_project_to_client(clnt_name, proj_name):
-    the_client = ClientModel.objects(clnt_name=clnt_name).first()
-    proj_obj = ProjectModel.objects(proj_name=proj_name).first()
-    proj_obj.update(client_id=the_client['id'])
-    return make_response({"projects":proj_obj}, 201)
+@appInstance.route('/add_project/<client_name>/<project_name>', methods=['PUT'])
+def add_project_to_client(client_name, project_name):
+    the_client = ClientModel.objects(client_name=client_name).first()
+    project_obj = ProjectModel.objects(project_name=project_name).first()
+    project_obj.update(clients_id=the_client['id'])
+    return make_response({"projects":project_obj}, 201)
 
 @jwt_required()
-@appInstance.route('/remove_project/<clnt_name>/<proj_name>', methods=['PUT'])
-def remove_project_to_client(clnt_name, proj_name):
-    the_client = ClientModel.objects(clnt_name=clnt_name).first()
-    proj_obj = ProjectModel.objects(proj_name=proj_name).first()
-    proj_obj.update(client_id=None)
-    return make_response({"projects":proj_obj}, 201)
+@appInstance.route('/remove_project/<client_name>/<project_name>', methods=['PUT'])
+def remove_project_to_client(client_name, project_name):
+    the_client = ClientModel.objects(client_name=client_name).first()
+    project_obj = ProjectModel.objects(project_name=project_name).first()
+    project_obj.update(clients_id=None)
+    return make_response({"projects":project_obj}, 201)

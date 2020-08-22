@@ -10,18 +10,15 @@ from flask_jwt import JWT, jwt_required
 ###########
 class Client(Resource):
     def get(self):
-        clnts = []
-        for clnt in ClientModel.objects:
-            clnts.append(clnt)
-        return jsonify({'data': clnts})
+        clients = ClientModel.objects.all()
+        return jsonify({'data': clients})
         
     @jwt_required()
     def post(self):
         content = request.get_json()
-        clnt = ClientModel(clnt_id=content['clnt_id'], clnt_name=content['clnt_name'])
-        clnt.save()
-        #return make_response("", 201)
-        return {"you sent":content}
+        client = ClientModel(client_id=content['client_id'], client_name=content['client_name'])
+        client.save()
+        return {"your data":content}
 
     def put(self):
         pass
@@ -30,23 +27,23 @@ class Client(Resource):
         pass
 
 class ClientByName(Resource):
-    def get(self,clnt_name):
-        the_client = ClientModel.objects(clnt_name=clnt_name).first()
+    def get(self,client_name):
+        the_client = ClientModel.objects(client_name=client_name).first()
         if the_client:
             #return jsonify(clnt_obj.to_json())
-            clnt_projs = ProjectModel.objects(client_id=the_client['id']).all()
-            proj_lst = ''
-            emply_lst = ''
-            for i in clnt_projs:
-                proj_lst += i['proj_name'] + '........'
+            client_projects = ProjectModel.objects(clients_id=the_client['id']).all()
+            project_lst = ''
+            employee_lst = ''
+            for i in client_projects:
+                project_lst += i['project_name'] + '........'
 
-                proj_emplys = EmployeeModel.objects(project_id=i['id']).all()
-                emply_lst += 'Project Name: {}  Employees Names: '.format(i['proj_name'])
-                for i in proj_emplys:
-                    emply_lst += i['emply_name'] + '...... '
-                    #return jsonify({"project":the_project['proj_name'], "employees":emply_lst})
+                project_employees = EmployeeModel.objects(projects_id=i['id']).all()
+                employee_lst += 'Project Name: {}  Employees Names: '.format(i['project_name'])
+                for i in project_employees:
+                    employee_lst += i['employee_name'] + '...... '
+                    #return jsonify({"project":the_project['project_name'], "employees":employee_lst})
 
-            return jsonify({"client":the_client['clnt_name'], "projects":proj_lst, "employees":emply_lst})
+            return jsonify({"client":the_client['client_name'], "projects":project_lst, "employees":employee_lst})
 
 
         #clnt_obj = ClientModel.objects(clnt_id=clnt_id).first()
@@ -60,16 +57,20 @@ class ClientByName(Resource):
         pass
     
     @jwt_required()
-    def put(self,clnt_name):
+    def put(self,client_name):
         content = request.get_json()
-        clnt_obj = ClientModel.objects(clnt_name=clnt_name).first()
-        clnt_obj.update(clnt_name=content['clnt_name'])
+        client_obj = ClientModel.objects(client_name=client_name).first()
+        if client_obj:
+            client_obj.update(client_name=content['client_name'])
+            return make_response("Updated", 201)
+        else:
+            return make_response("not found", 404)
 
     @jwt_required()
-    def delete(self,clnt_name):
-        clnt_obj = ClientModel.objects(clnt_name=clnt_name).first()
-        if clnt_obj:
-            clnt_obj.delete()
+    def delete(self,client_name):
+        client_obj = ClientModel.objects(client_name=client_name).first()
+        if client_obj:
+            client_obj.delete()
             return make_response("Deleted", 201)
         else:
             return make_response("not found", 404)

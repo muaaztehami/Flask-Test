@@ -15,33 +15,33 @@ db.init_app(appInstance)
 
 
 class ClientModel(db.Document):
-    clnt_id = db.IntField()
-    clnt_name = db.StringField()
+    client_id = db.IntField()
+    client_name = db.StringField()
 
     def to_json(self):
         return {
-            "clnt_id": self.clnt_id,
-            "clnt_name": self.clnt_name
+            "client_id": self.client_id,
+            "client_name": self.client_name
         }
 
 class ProjectModel(db.Document):
-    proj_id = db.IntField()
-    proj_name = db.StringField()
-    client_id = db.ReferenceField(ClientModel)
+    project_id = db.IntField()
+    project_name = db.StringField()
+    clients_id = db.ReferenceField(ClientModel)
 
     def to_json(self):
         return {
-            "proj_id": self.proj_id,
-            "proj_name": self.proj_name
+            "project_id": self.project_id,
+            "project_name": self.project_name
         }
 
 class EmployeeModel(db.Document):
-    emply_id = db.IntField()
-    emply_name = db.StringField()
-    project_id = db.ReferenceField(ProjectModel)
+    employee_id = db.IntField()
+    employee_name = db.StringField()
+    projects_id = db.ReferenceField(ProjectModel)
 
     def to_json(self):
         return {
-            "emply_id": self.emply_id,
-            "emply_name": self.emply_name
+            "employee_id": self.employee_id,
+            "employee_name": self.employee_name
         }

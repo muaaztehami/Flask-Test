@@ -11,32 +11,29 @@ from flask_jwt import JWT, jwt_required
 ###########
 class Project(Resource):
     def get(self):
-       # emplys = EmployeeModel.objects.all()
-        projs = []
-        for proj in ProjectModel.objects:
-            projs.append(proj)
-        return jsonify({'data': projs})
+        projects = ProjectModel.objects.all()
+        return jsonify({'data': projects})
         
     @jwt_required()
     def post(self):
         content = request.get_json()
-        proj = ProjectModel(proj_id=content['proj_id'], proj_name=content['proj_name'])
-        proj.save()
+        project = ProjectModel(project_id=content['project_id'], project_name=content['project_name'])
+        project.save()
         #return make_response("", 201)
         return {"you sent":content}
 
 
 class ProjectByName(Resource):
-    def get(self,proj_name):
-        the_project = ProjectModel.objects(proj_name=proj_name).first()
+    def get(self,project_name):
+        the_project = ProjectModel.objects(project_name=project_name).first()
         if the_project:
             
-            proj_emplys = EmployeeModel.objects(project_id=the_project['id']).all()
+            project_employees = EmployeeModel.objects(projects_id=the_project['id']).all()
             
             lst = ''
-            for i in proj_emplys:
-                lst += i['emply_name'] + '........'
-            return jsonify({"project":the_project['proj_name'], "employees":lst})
+            for i in project_employees:
+                lst += i['employee_name'] + '........'
+            return jsonify({"project":the_project['project_name'], "employees":lst})
 
 
         #proj_obj = ProjectModel.objects(proj_id=proj_id).first()
@@ -50,20 +47,22 @@ class ProjectByName(Resource):
         pass
 
     @jwt_required()
-    def put(self,proj_name):
+    def put(self,project_name):
         content = request.get_json()
-        proj_obj = ProjectModel.objects(proj_name=proj_name).first()
-        proj_obj.update(proj_name=content['proj_name'])
+        project_obj = ProjectModel.objects(project_name=project_name).first()
+        if project_obj:
+            project_obj.update(project_name=content['project_name'])
+            return make_response("Updated", 201)
+        else:
+            return make_response("not found", 404)
 
     @jwt_required()
-    def delete(self,proj_name):
-        proj_obj = ProjectModel.objects(proj_name=proj_name).first()
-        if proj_obj:
-            proj_emplys = EmployeeModel.objects(project_id=proj_obj['id']).all()
-            for e in proj_emplys:
-                e['project_id']=None
-            
-            proj_obj.delete()
+    def delete(self,project_name):
+        project_obj = ProjectModel.objects(project_name=project_name).first()
+        if project_obj:
+            project_emplys = EmployeeModel.objects(projects_id=project_obj['id']).all()
+            project_emplys.update(projects_id=None)
+            project_obj.delete()
             return make_response("Deleted", 201)
         else:
             return make_response("not found", 404)

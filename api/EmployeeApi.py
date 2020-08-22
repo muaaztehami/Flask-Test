@@ -10,20 +10,15 @@ from flask_jwt import JWT, jwt_required
 
 ###########
 class Employee(Resource):
-    #@jwt_required()
     def get(self):
-       # emplys = EmployeeModel.objects.all()
-        emplys = []
-        for emply in EmployeeModel.objects:
-            emplys.append(emply)
-        #logger(emplys)
-        return jsonify({'data': emplys})
+        employees = EmployeeModel.objects.all()
+        return jsonify({'data': employees})
         
     @jwt_required()
     def post(self):
         content = request.get_json()
-        emply = EmployeeModel(emply_id=content['emply_id'], emply_name=content['emply_name'])
-        emply.save()
+        employee = EmployeeModel(employee_id=content['employee_id'], employee_name=content['employee_name'])
+        employee.save()
         #return make_response("", 201)
         return {"you sent":content}
 
@@ -34,10 +29,10 @@ class Employee(Resource):
         pass
 
 class EmployeeByName(Resource):
-    def get(self,emply_name):
-        emply_obj = EmployeeModel.objects(emply_name=emply_name).first()
-        if emply_obj:
-            return jsonify(emply_obj.to_json())
+    def get(self,employee_name):
+        employee_obj = EmployeeModel.objects(employee_name=employee_name).first()
+        if employee_obj:
+            return jsonify(employee_obj.to_json())
         else:
             return make_response("", 404)
         #logger.debug("Inside GET")
@@ -47,16 +42,20 @@ class EmployeeByName(Resource):
         pass
 
     @jwt_required()
-    def put(self,emply_name):
+    def put(self,employee_name):
         content = request.get_json()
-        emply_obj = EmployeeModel.objects(emply_name=emply_name).first()
-        emply_obj.update(emply_name=content['emply_name'])
+        employee_obj = EmployeeModel.objects(employee_name=employee_name).first()
+        if employee_obj:
+            employee_obj.update(employee_name=content['employee_name'])
+            return make_response("Updated", 201)
+        else:
+            return make_response("not found", 404)
 
     @jwt_required()
-    def delete(self, emply_name):
-        emply_obj = EmployeeModel.objects(emply_name=emply_name).first()
-        if emply_obj:
-            emply_obj.delete()
+    def delete(self, employee_name):
+        employee_obj = EmployeeModel.objects(employee_name=employee_name).first()
+        if employee_obj:
+            employee_obj.delete()
             return make_response("Deleted", 201)
         else:
             return make_response("not found", 404)
