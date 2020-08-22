@@ -17,10 +17,11 @@ def process():
 
 @celery.task(name='apis.check_employees')
 def check_employees(task_id=None):
-    not_working = EmployeeModel.objects(projects_id=None).all()
-    employee_names = ''
-    for e in not_working:
-        employee_names +=e['employee_name']
+    #not_working = EmployeeModel.objects(projects_id=None).all()
+    employee_names = EmployeeModel.objects.filter(projects_id=None).values_list('employee_name')
+    #employee_names = ''
+    #for e in not_working:
+    #    employee_names +=e['employee_name']
     return employee_names
 #check_employees.delay()
 

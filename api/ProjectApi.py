@@ -27,19 +27,16 @@ class ProjectByName(Resource):
     def get(self,project_name):
         the_project = ProjectModel.objects(project_name=project_name).first()
         if the_project:
+            lst = EmployeeModel.objects.filter(projects_id=the_project['id']).values_list('employee_name')
+
+            #project_employees = EmployeeModel.objects(projects_id=the_project['id']).all()
             
-            project_employees = EmployeeModel.objects(projects_id=the_project['id']).all()
-            
-            lst = ''
-            for i in project_employees:
-                lst += i['employee_name'] + '........'
+            #lst = ''
+            #for i in project_employees:
+            #    lst += i['employee_name'] + '........'
             return jsonify({"project":the_project['project_name'], "employees":lst})
+            
 
-
-        #proj_obj = ProjectModel.objects(proj_id=proj_id).first()
-        #if proj_obj:
-        #    return jsonify(proj_obj.to_json())
-        #else:
         return make_response("Not found", 404)
         
 

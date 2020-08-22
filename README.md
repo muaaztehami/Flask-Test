@@ -29,21 +29,21 @@ HOW TO USE:
 - ADD EMPLOYEE (POST)
 	http://127.0.0.1:5000/funnelbeam/employee
 	{
-	   "emply_id":1,
-	   "emply_name":"xyz"
+	   "employee_id":1,
+	   "employee_name":"xyz"
 	}
 
 - EDIT EMPLOYEE (PUT)
-	http://127.0.0.1:5000/funnelbeam/employee/<emply_name>
+	http://127.0.0.1:5000/funnelbeam/employee/<empleyee_name>
 	{
-	   "emply_name":"xyz"
+	   "employee_name":"xyz"
 	}
 
 - DELETE EMPLOYEE (DELETE)
-	http://127.0.0.1:5000/funnelbeam/employee/<emply_name>
+	http://127.0.0.1:5000/funnelbeam/employee/<employee_name>
 
 - GET EMPLOYEE BY NAME (GET)
-	http://127.0.0.1:5000/funnelbeam/employee/<emply_name>
+	http://127.0.0.1:5000/funnelbeam/employee/<employee_name>
 
 - GET EMPLOYEES (GET)
 	http://127.0.0.1:5000/funnelbeam/employee
@@ -52,21 +52,21 @@ HOW TO USE:
 - ADD CLIENT (POST)
 	http://127.0.0.1:5000/funnelbeam/client
 	{
-	   "clnt_id":1,
-	   "clnt_name":"xyz"
+	   "client_id":1,
+	   "client_name":"xyz"
 	}
 
 - EDIT CLIENT (PUT)
-	http://127.0.0.1:5000/funnelbeam/client/<clnt_name>
+	http://127.0.0.1:5000/funnelbeam/client/<client_name>
 	{
-	   "clnt_name":"xyz"
+	   "client_name":"xyz"
 	}
 
 - DELETE CLIENT (DELETE)
-	http://127.0.0.1:5000/funnelbeam/client/<clnt_name>
+	http://127.0.0.1:5000/funnelbeam/client/<client_name>
 
 - GET CLIENT BY NAME (GET).............(this will also return all projects of that client & employees in each project)
-	http://127.0.0.1:5000/funnelbeam/client/<clnt_name>
+	http://127.0.0.1:5000/funnelbeam/client/<client_name>
 
 - GET CLIENT (GET)
 	http://127.0.0.1:5000//funnelbeam/client
@@ -75,37 +75,37 @@ HOW TO USE:
 - ADD PROJECT (POST)
 	http://127.0.0.1:5000/funnelbeam/project
 	{
-	   "proj_id":1,
-	   "proj_name":"xyz"
+	   "project_id":1,
+	   "project_name":"xyz"
 	}
 
 - EDIT PROJECT (PUT)
-	http://127.0.0.1:5000/funnelbeam/project/<proj_name>
+	http://127.0.0.1:5000/funnelbeam/project/<project_name>
 	{
-	   "proj_name":"xyz"
+	   "project_name":"xyz"
 	}
 
 - DELETE PROJECT (DELETE)
-	http://127.0.0.1:5000/funnelbeam/project/<proj_name>
+	http://127.0.0.1:5000/funnelbeam/project/<project_name>
 
 - GET PROJECT BY NAME (GET) ........(this will also return all employees of that project)
-	http://127.0.0.1:5000//funnelbeam/project/<proj_name>
+	http://127.0.0.1:5000//funnelbeam/project/<project_name>
 
 - GET PROJECT (GET)
 	http://127.0.0.1:5000/funnelbeam/project
 **************************************************************************
 *******************OTHER APIS*****************************
 -ADD EMPLOYEE TO A PROJECT (PUT)
-	http://127.0.0.1:5000/add_employee/<proj_name>/<emply_name>
+	http://127.0.0.1:5000/add_employee/<project_name>/<employee_name>
 
 -REMOVE EMPLOYEE FROM A PROJECT (PUT)
-	http://127.0.0.1:5000/remove_employee/<proj_name>/<emply_name>
+	http://127.0.0.1:5000/remove_employee/<project_name>/<employee_name>
 
 -ADD PROJECT TO A CLIENT (PUT)
-	http://127.0.0.1:5000/add_project/<clnt_name>/<proj_name>
+	http://127.0.0.1:5000/add_project/<client_name>/<project_name>
 
 -REMOVE PROJECT FROM A CLIENT (PUT)
-	http://127.0.0.1:5000/remove_project/<clnt_name>/<proj_name>
+	http://127.0.0.1:5000/remove_project/<client_name>/<project_name>
 
 
 .......(celery runs automatically but in case to explicitly run celery).................
